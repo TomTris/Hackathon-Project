@@ -3,6 +3,88 @@ import Home  from "./pages/Home"
 import Nav from "./components/Nav"
 import { ethers } from 'ethers';
 
+
+
+
+
+
+
+
+import React, { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+
+const loadBlockchainData = async (setError) => {
+  try {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const accounts = await provider.listAccounts();
+    if (accounts.length === 0) {
+      setError('No accounts found. Please check MetaMask.');
+    }
+  } catch (error) {
+    setError('Error loading accounts: ' + error.message);
+  }
+};
+
+
+
+
+  const [error, setError] = useState(null);
+  const [extensionLink, setExtensionLink] = useState('');
+
+  useEffect(() => {
+    const initialize = async () => {
+      if (window.ethereum) {
+        await loadBlockchainData(setError);
+      } else {
+        const browser = detectBrowser();
+        const link = getExtensionLink(browser);
+        console.log('Detected browser:', browser);
+        console.log('Extension link:', link);
+        setExtensionLink(link);
+        setError('MetaMask is not installed. Please install MetaMask to continue.');
+      }
+    };
+
+    initialize();
+  }, []);
+
+  return (
+    <div>
+      {error ? (
+        <div>
+          <p>{error}</p>
+          <a
+            type="button"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded"
+            href={extensionLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Install MetaMask
+          </a>
+        </div>
+      ) : (
+        <div>
+          <p>Blockchain data loaded successfully.</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MetaMaskChecker;
+
+
+
+
+
+
+
+
+
+
+
+
 function App() {
   return (
     <div className="App">
