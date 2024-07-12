@@ -6,9 +6,10 @@ import { ethers } from 'ethers';
 function App() {
   return (
     <div className="App">
-      <Router>
-        <header className="App-header bg-blue-500 text-white p-4">
-          <h1 className="text-2xl font-bold">CRYPTOFUND</h1>
+      <Router >
+        <header className="App-header bg-blue-500 text-red p-4">
+          <h1 className="text-2xl font-bold text-red">CRYPTOFUND</h1>
+          <p>Welcome to CryptoFund, your decentralized and anonymous way of croudfunding</p>
           <Nav />
         </header>
         <main className="p-4">
