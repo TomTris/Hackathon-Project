@@ -42,3 +42,7 @@ export function ethtowei(eth) {
   export function weitoeth(wei) {
 	return wei / Math.pow(10, 18);
   }
+
+ export function slugString(strval) {
+    return strval.toLowerCase().replace(/\s+/g, '_');
+}
