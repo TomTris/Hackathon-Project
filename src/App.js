@@ -15,6 +15,7 @@ import Category from './pages/Category';
 function App() {
   const [isLoggined, setLoggined] = useState(false);
   const [primaryWallet, setWallet] = useState(null);
+  const [isAnyLoggined, setAnyLoggined] = useState(false);
 
   const handleLoggin = (newState) => {
     setLoggined(newState);
@@ -22,7 +23,10 @@ function App() {
   const getWallet = (wallet) => {
     setWallet(wallet);
   }
-  
+  const handleIsAnyLoggined = (isAvaiable) => {
+    setAnyLoggined(isAvaiable);
+  }
+
   return (
     <div className="App">
       <DynamicContextProvider
@@ -52,7 +56,11 @@ function App() {
             </Routes>
           </main>
         </Router>
-        <ListConnectedWallets handleLoggin={handleLoggin} getWallet={getWallet}/>
+        <ListConnectedWallets handleLoggin={handleLoggin} getWallet={getWallet}
+                              handleIsAnyLoggined={handleIsAnyLoggined}/>
+        {isAnyLoggined ? <p>something is Avaible</p> : <p>Nothing avaiable</p>}
+        {primaryWallet ? <p>primaryWallet available</p> : <p>primaryWallet not avaiable</p>}
+        {isLoggined ? <p>primaryWallet is loggined</p> : <p>primaryWallet isn't loggin / primariwallet not available</p>}
       </DynamicContextProvider>
     </div>
   );

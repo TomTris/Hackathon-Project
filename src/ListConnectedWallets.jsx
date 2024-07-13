@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useUserWallets, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
-const ListConnectedWallets = ({ handleLoggin, getWallet }) => {
+const ListConnectedWallets = ({ handleLoggin, getWallet, handleIsAnyLoggined }) => {
+  const userWallets = useUserWallets();
   const { primaryWallet } = useDynamicContext();
+
 
   useEffect(() => {
     // Call handleLoggin function whenever primaryWallet connection status changes
@@ -12,7 +14,19 @@ const ListConnectedWallets = ({ handleLoggin, getWallet }) => {
       handleLoggin(false);
     }
     getWallet(primaryWallet);
-  }, [primaryWallet, handleLoggin]);
+
+    let anyWalletConnected = false;
+
+    // Check if any wallet in userWallets is connected
+    if (userWallets && userWallets.length > 0) {
+      for (const wallet of userWallets) {
+        if (wallet.address && wallet.connected) {
+          anyWalletConnected = true;
+          break;
+        }
+      }
+    }
+  }, [primaryWallet, userWallets, handleLoggin, getWallet, handleIsAnyLoggined]);
 
   return (
     <span></span>
