@@ -76,103 +76,109 @@ function CreateProject({ primaryWallet }) {
 
   return (
     <div>
-      <form className="flex flex-col">
-        <label className="flex flex-col">
-          Owner Wallet
-          <input
-            type="text"
-		  	className="opacity-50 select-none"
-            name="address"
-            value={project.address}
-            onChange={handleChange}
-            placeholder="Wallet Address"
-			readOnly
-          />
-        </label>
-        <label className="flex flex-col">
-          Project Name
-          <input
-            type="text"
-            name="name"
-            value={project.name}
-            onChange={handleChange}
-            placeholder="Name your Idea"
-          />
-        </label>
-        <label className="flex flex-col">
-          Categories
-        </label>
-        <div className="flex flex-wrap">
-          <label className="flex">
-            <input
-              type="checkbox"
-              name="categories"
-              value="ai"
-              onChange={handleChange}
-            />
-            AI
-          </label>
-          <label className="flex">
-            <input
-              type="checkbox"
-              name="categories"
-              value="diy"
-              onChange={handleChange}
-            />
-            DIY
-          </label>
-        </div>
-        <label className="flex flex-col">
-          Fund
-          <input
-            type="number"
-            name="totalFund"
-            value={weitoeth(project.totalFund)}
-            onChange={handleChange}
-            step="0.000000000000000001"
-            min="0"
-            placeholder="Total Fund in ETH"
-          />
-          <div className="flex flex-col">
-            <strong>{(weitoeth(project.totalFund) * ethToUsdRate).toFixed(2)} $</strong>
-            <span>1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
-          </div>
-        </label>
-        <label className="flex flex-col">
-          Own Invest
-          <input
-            type="number"
-            name="moneyOwner"
-            value={weitoeth(project.moneyOwner)}
-            onChange={handleChange}
-            step="0.000000000000000001"
-            min="0"
-            placeholder="Your share in ETH"
-          />
-          <div className="flex flex-col">
-            <strong>{(weitoeth(project.moneyOwner) * ethToUsdRate).toFixed(2)} $</strong>
-            <span>1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
-          </div>
-        </label>
-        <label className="flex flex-col">
-          Your Share
-          <input
-		  	className="opacity-50 select-none"
-            type="number"
-            name="percentage"
-            value={project.percentage}
-            readOnly
-          />
-          %
-        </label>
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
-          disabled={!projectValid}
-        >
-          Add Project
-        </button>
-      </form>
+<form className="flex flex-col space-y-4 p-6 bg-white rounded shadow-md">
+  <label className="flex flex-col">
+    <span className="font-semibold mb-2">Owner Wallet</span>
+    <input
+      type="text"
+      className="opacity-50 select-none bg-gray-200 p-2 rounded"
+      name="address"
+      value={project.address}
+      onChange={handleChange}
+      placeholder="Wallet Address"
+      readOnly
+    />
+  </label>
+  <label className="flex flex-col">
+    <span className="font-semibold mb-2">Project Name</span>
+    <input
+      type="text"
+      className="bg-gray-100 p-2 rounded"
+      name="name"
+      value={project.name}
+      onChange={handleChange}
+      placeholder="Name your Idea"
+    />
+  </label>
+  <label className="flex flex-col">
+    <span className="font-semibold mb-2">Categories</span>
+  </label>
+  <div className="flex flex-wrap gap-4">
+    <label className="flex items-center space-x-2">
+      <input
+        type="checkbox"
+        className="form-checkbox"
+        name="categories"
+        value="ai"
+        onChange={handleChange}
+      />
+      <span>AI</span>
+    </label>
+    <label className="flex items-center space-x-2">
+      <input
+        type="checkbox"
+        className="form-checkbox"
+        name="categories"
+        value="diy"
+        onChange={handleChange}
+      />
+      <span>DIY</span>
+    </label>
+  </div>
+  <label className="flex flex-col">
+    <span className="font-semibold mb-2">Fund</span>
+    <input
+      type="number"
+      className="bg-gray-100 p-2 rounded"
+      name="totalFund"
+      value={weitoeth(project.totalFund)}
+      onChange={handleChange}
+      step="0.000000000000000001"
+      min="0"
+      placeholder="Total Fund in ETH"
+    />
+    <div className="flex flex-col mt-2">
+      <strong className="text-lg">{(weitoeth(project.totalFund) * ethToUsdRate).toFixed(2)} $</strong>
+      <span className="text-sm text-gray-500">1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
+    </div>
+  </label>
+  <label className="flex flex-col">
+    <span className="font-semibold mb-2">Own Invest</span>
+    <input
+      type="number"
+      className="bg-gray-100 p-2 rounded"
+      name="moneyOwner"
+      value={weitoeth(project.moneyOwner)}
+      onChange={handleChange}
+      step="0.000000000000000001"
+      min="0"
+      placeholder="Your share in ETH"
+    />
+    <div className="flex flex-col mt-2">
+      <strong className="text-lg">{(weitoeth(project.moneyOwner) * ethToUsdRate).toFixed(2)} $</strong>
+      <span className="text-sm text-gray-500">1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
+    </div>
+  </label>
+  <label className="flex flex-col">
+    <span className="font-semibold mb-2">Your Share</span>
+    <input
+      className="opacity-50 select-none bg-gray-200 p-2 rounded"
+      type="number"
+      name="percentage"
+      value={project.percentage}
+      readOnly
+    />
+    <span>%</span>
+  </label>
+  <button
+    type="submit"
+    className="bg-blue-500 hover:bg-blue-700 text-white py-2 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+    disabled={!projectValid}
+  >
+    Add Project
+  </button>
+</form>
+
     </div>
   );
 }

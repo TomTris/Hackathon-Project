@@ -1,24 +1,31 @@
 import React, { useContext } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
-import { WalletContext } from '../contexts/WalletContext';
+import { Link, useParams } from 'react-router-dom';
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { slugString } from '../helpers/frontendHelper';
+import ProjectDetails from '../components/ProjectDetails';
+import ProjectFund from '../components/ProjectFund';
 
-function Project() {
-  const { slug } = useParams();
-  const location = useLocation();
-  const { primaryWallet } = useContext(WalletContext);
-  const project = location.state?.project;
+const Project = ({ projects }) => {
+    const { slug } = useParams();
+    const { primaryWallet } = useDynamicContext();
+    const project = projects.find(p => slugString(p.name) === slug);
 
-  return (
-    <div>
-      <Link to="/">
-        <button>Back to Categories</button>
-      </Link>
-      <div>
-        <h2>Primary Wallet Address: {primaryWallet?.address}</h2>
-        <h2>Project Address: {project?.address}</h2>
-      </div>
-    </div>
-  );
-}
+    if (!project || !primaryWallet) {
+        return <div>Projekt nicht gefunden</div>;
+    }
+
+    return (
+        <div>
+            <Link to="/">
+                <button>Back to Categories</button>
+            </Link>
+            {primaryWallet && (
+                primaryWallet.address === project.moneyOwner ? 
+                    <ProjectDetails project={project} primaryWallet={primaryWallet} /> : 
+                    <ProjectFund project={project}  primaryWallet={primaryWallet} />
+            )}
+        </div>
+    );
+};
 
 export default Project;

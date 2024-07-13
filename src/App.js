@@ -11,16 +11,13 @@ import NoPage from './pages/NoPage';
 import Category from './pages/Category';
 import Project from './pages/Project';
 
+const WalletContext = React.createContext();
+
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [primaryWallet, setWallet] = useState(null);
   const [isAnyLoggedIn, setAnyLoggedIn] = useState(false);
-  const [contract, setContract] = useState(null);
-  const [categories, setCategories] = useState([
-    "AI",
-    "Tech",
-    "Security"
-  ]);
+  const [categories, setCategories] = useState([]);
   const [projects, setProjects] = useState([
 	{
 	  name: "AI Research Project",
@@ -100,9 +97,6 @@ function App() {
   const handleisAnyLoggedIn = (isAvailable) => {
     setAnyLoggedIn(isAvailable);
   };
-  const handleContract = (contract) => {
-    setContract(contract);
-  };
 
   return (
     <div className="App">
@@ -124,18 +118,17 @@ function App() {
             <DynamicWidget />
           </header>
           <main className="p-4">
-            {contract}
             <Routes>
               <Route path="/" element={<Home primaryWallet={primaryWallet} isLoggedIn={isLoggedIn} isAnyLoggedIn={isAnyLoggedIn} categories={categories} projects={projects}/>} />
               <Route path="/createProject" element={primaryWallet ? <CreateProject primaryWallet={primaryWallet} /> : <Home primaryWallet={primaryWallet} isLoggedIn={isLoggedIn} isAnyLoggedIn={isAnyLoggedIn} />} />
               <Route path="/categories/:slug" element={<Category />} />
-			  <Route path="/projects/:slug" element={<Project />} />
+			  <Route path="/projects/:slug" element={<Project projects={projects} />} />
 			  primaryWallet
               <Route path="*" element={<NoPage />} />
             </Routes>
           </main>
         </Router>
-        <ListConnectedWallets handleLoggin={handleLoggin} getWallet={getWallet} handleisAnyLoggedIn={handleisAnyLoggedIn} handleContract={handleContract} />
+        <ListConnectedWallets handleLoggin={handleLoggin} getWallet={getWallet} handleisAnyLoggedIn={handleisAnyLoggedIn} />
       </DynamicContextProvider>
     </div>
   );
