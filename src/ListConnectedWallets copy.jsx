@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useUserWallets, useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { ethers } from 'ethers';
-import { FUNDIND_ABI, FUNDIND_ADDRESS } from './contract.config';
 
-const ListConnectedWallets = ({ handleLoggin, getWallet, handleisAnyLoggedIn, handleContract }) => {
+const ListConnectedWallets = ({ handleLoggin, getWallet, handleisAnyLoggedIn }) => {
   const userWallets = useUserWallets();
   const { primaryWallet } = useDynamicContext();
 
   useEffect(() => {
+    // Call handleLoggin function whenever primaryWallet connection status changes
     if (primaryWallet && primaryWallet.connected) {
       handleLoggin(true);
     } else {
@@ -26,15 +25,6 @@ const ListConnectedWallets = ({ handleLoggin, getWallet, handleisAnyLoggedIn, ha
       }
     }
     handleisAnyLoggedIn(anyWalletConnected);
-
-    if (primaryWallet && primaryWallet.provider) {
-		console.log(primaryWallet.provider)
-      const provider = new ethers.BrowserProvider(primaryWallet.provider);
-      const signer = provider.getSigner();
-      const contractInstance = new ethers.Contract(FUNDIND_ADDRESS, FUNDIND_ABI, signer);
-      handleContract(contractInstance);
-    }
-
   }, [primaryWallet, userWallets, handleLoggin, getWallet, handleisAnyLoggedIn]);
 
   return (
