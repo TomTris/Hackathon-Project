@@ -1,79 +1,3 @@
-import { BrowserRouter as Router, Route, Routes, Link, useLocation } from 'react-router-dom';
-import Home  from "./pages/Home"
-import Nav from "./components/Nav"
-import { ethers } from 'ethers';
-
-
-// import {
-//   DynamicContextProvider,
-//   DynamicWidget,
-// } from "@dynamic-labs/sdk-react-core";
-// import { EthersExtension } from "@dynamic-labs/ethers-v6";
-
-// import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
-
-
-
-// const loadBlockchainData = async (setError) => {
-//   try {
-//     const provider = new ethers.BrowserProvider(window.ethereum);
-//     const accounts = await provider.listAccounts();
-//     if (accounts.length === 0) {
-//       setError('No accounts found. Please check MetaMask.');
-//     }
-//   } catch (error) {
-//     setError('Error loading accounts: ' + error.message);
-//   }
-// };
-
-
-
-
-//   const [error, setError] = useState(null);
-//   const [extensionLink, setExtensionLink] = useState('');
-
-//   useEffect(() => {
-//     const initialize = async () => {
-//       if (window.ethereum) {
-//         await loadBlockchainData(setError);
-//       } else {
-//         const browser = detectBrowser();
-//         const link = getExtensionLink(browser);
-//         console.log('Detected browser:', browser);
-//         console.log('Extension link:', link);
-//         setExtensionLink(link);
-//         setError('MetaMask is not installed. Please install MetaMask to continue.');
-//       }
-//     };
-
-//     initialize();
-//   }, []);
-
-//   return (
-//     <div>
-//       {error ? (
-//         <div>
-//           <p>{error}</p>
-//           <a
-//             type="button"
-//             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded"
-//             href={extensionLink}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             Install MetaMask
-//           </a>
-//         </div>
-//       ) : (
-//         <div>
-//           <p>Blockchain data loaded successfully.</p>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default MetaMaskChecker;
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -83,6 +7,7 @@ import { DynamicContextProvider, DynamicWidget } from '@dynamic-labs/sdk-react-c
 import { EthersExtension } from '@dynamic-labs/ethers-v6';
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 import ListConnectedWallets from './ListConnectedWallets';
+import CreateProject from './pages/CreateProject';
 
 function App() {
   return (
@@ -104,6 +29,7 @@ function App() {
           <main className="p-4">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/createProject" element={<CreateProject />} />
             </Routes>
           </main>
         </Router>
