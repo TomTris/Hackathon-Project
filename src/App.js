@@ -75,7 +75,8 @@ import { ethers } from 'ethers';
 
 // export default MetaMaskChecker;
 
-import React from 'react';
+// import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Nav from './components/Nav';
@@ -85,6 +86,16 @@ import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 import ListConnectedWallets from './ListConnectedWallets';
 
 function App() {
+  const [isLoggined, setLoggined] = useState(false);
+
+  const handleLoggin = (newState) => {
+    setLoggined(newState);
+    if (newState == true)
+      <p>Loggined</p>
+    else
+      <p>Not Loggined</p>
+  }
+  
   return (
     <div className="App">
       <DynamicContextProvider
@@ -107,7 +118,10 @@ function App() {
             </Routes>
           </main>
         </Router>
-        <ListConnectedWallets />
+        <ListConnectedWallets handleLoggin={handleLoggin} />
+        <div>
+          {isLoggined ? <p>Logged in</p> : <p>Not logged in</p>}
+        </div>
       </DynamicContextProvider>
     </div>
   );
