@@ -2,7 +2,7 @@
 // FUNDING
 //////////////////////////////////////////////
 
-export const FUNDIND_ABI = [
+export const FUNDING_ABI = [
     {
       "inputs": [],
       "stateMutability": "nonpayable",
@@ -342,4 +342,4 @@ export const FUNDIND_ABI = [
       "type": "function"
     }
   ];
-export const FUNDIND_ADDRESS = '0x1D14301354840740e9696d956AbD5731A1ba2EF6';
+export const FUNDING_ADDRESS = '0x1D14301354840740e9696d956AbD5731A1ba2EF6';

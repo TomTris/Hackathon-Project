@@ -27,14 +27,6 @@ const ListConnectedWallets = ({ handleLoggin, getWallet, handleisAnyLoggedIn, ha
     }
     handleisAnyLoggedIn(anyWalletConnected);
 
-    if (primaryWallet && primaryWallet.provider) {
-		console.log(primaryWallet.provider)
-      const provider = new ethers.BrowserProvider(primaryWallet.provider);
-      const signer = provider.getSigner();
-      const contractInstance = new ethers.Contract(FUNDIND_ADDRESS, FUNDIND_ABI, signer);
-      handleContract(contractInstance);
-    }
-
   }, [primaryWallet, userWallets, handleLoggin, getWallet, handleisAnyLoggedIn]);
 
   return (

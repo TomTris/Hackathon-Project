@@ -17,12 +17,7 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [primaryWallet, setWallet] = useState(null);
   const [isAnyLoggedIn, setAnyLoggedIn] = useState(false);
-  const [contract, setContract] = useState(null);
-  const [categories, setCategories] = useState([
-    "AI",
-    "Tech",
-    "Security"
-  ]);
+  const [categories, setCategories] = useState([]);
   const [projects, setProjects] = useState([
 	{
 	  name: "AI Research Project",
@@ -49,7 +44,7 @@ function App() {
 	  finished: false,
 	  owner: "0xabcdefabcdefabcdefabcdefabcdefabcdef",
 	  percentage: 25,
-	  moneyOwner: '0x31a7f7889C6a73b5C54B8742255ad903A385C945',
+	  moneyOwner: 50000,
 	  shares: [
 		{ owner: "0x1234567890123456789012345678901234567890", percentage: 40 },
 		{ owner: "0xfedcba0987654321098765432109876543210987", percentage: 30 },
@@ -102,9 +97,6 @@ function App() {
   const handleisAnyLoggedIn = (isAvailable) => {
     setAnyLoggedIn(isAvailable);
   };
-  const handleContract = (contract) => {
-    setContract(contract);
-  };
 
   return (
     <div className="App">
@@ -126,7 +118,6 @@ function App() {
             <DynamicWidget />
           </header>
           <main className="p-4">
-            {contract}
             <Routes>
               <Route path="/" element={<Home primaryWallet={primaryWallet} isLoggedIn={isLoggedIn} isAnyLoggedIn={isAnyLoggedIn} categories={categories} projects={projects}/>} />
               <Route path="/createProject" element={primaryWallet ? <CreateProject primaryWallet={primaryWallet} /> : <Home primaryWallet={primaryWallet} isLoggedIn={isLoggedIn} isAnyLoggedIn={isAnyLoggedIn} />} />
@@ -137,7 +128,7 @@ function App() {
             </Routes>
           </main>
         </Router>
-        <ListConnectedWallets handleLoggin={handleLoggin} getWallet={getWallet} handleisAnyLoggedIn={handleisAnyLoggedIn} handleContract={handleContract} />
+        <ListConnectedWallets handleLoggin={handleLoggin} getWallet={getWallet} handleisAnyLoggedIn={handleisAnyLoggedIn} />
       </DynamicContextProvider>
     </div>
   );
