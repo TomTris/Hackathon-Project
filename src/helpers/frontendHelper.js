@@ -35,3 +35,10 @@ export function detectBrowser() {
 	if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) return 'Safari';
 	return 'Other';
 };
+export function ethtowei(eth) {
+	return eth * Math.pow(10, 18);
+  }
+  
+  export function weitoeth(wei) {
+	return wei / Math.pow(10, 18);
+  }
