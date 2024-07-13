@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
-const ListConnectedWallets = ({ handleLoggin }) => {
+const ListConnectedWallets = ({ handleLoggin, getWallet }) => {
   const { primaryWallet } = useDynamicContext();
 
   useEffect(() => {
@@ -11,19 +11,11 @@ const ListConnectedWallets = ({ handleLoggin }) => {
     } else {
       handleLoggin(false);
     }
+    getWallet(primaryWallet);
   }, [primaryWallet, handleLoggin]);
 
   return (
-    <div>
-      <h2>Primary Wallet</h2>
-      {primaryWallet ? (
-        <p>
-          {primaryWallet.address}: {primaryWallet.connected ? 'Connected' : 'Not connected'}
-        </p>
-      ) : (
-        <p>No primary wallet connected</p>
-      )}
-    </div>
+    <></>
   );
 }
 
