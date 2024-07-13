@@ -1,6 +1,6 @@
-// import { BrowserRouter as Router, Route, Routes, Link, useLocation } from 'react-router-dom';
-// import Home  from "./pages/Home"
-// import Nav from "./components/Nav"
+import { BrowserRouter as Router, Route, Routes, Link, useLocation } from 'react-router-dom';
+import Home  from "./pages/Home"
+import Nav from "./components/Nav"
 import { ethers } from 'ethers';
 
 
