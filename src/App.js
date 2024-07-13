@@ -12,13 +12,13 @@ import CreateProject from './pages/CreateProject';
 
 function App() {
   const [isLoggined, setLoggined] = useState(false);
+  const [primaryWallet, setWallet] = useState(null);
 
   const handleLoggin = (newState) => {
     setLoggined(newState);
-    if (newState == true)
-      <p>Loggined</p>
-    else
-      <p>Not Loggined</p>
+  }
+  const getWallet = (wallet) => {
+    setWallet(wallet);
   }
   
   return (
@@ -44,9 +44,15 @@ function App() {
             </Routes>
           </main>
         </Router>
-        <ListConnectedWallets handleLoggin={handleLoggin} />
+        <ListConnectedWallets handleLoggin={handleLoggin}
+                              getWallet={getWallet}/>
         <div>
-          {isLoggined ? <p>Logged in</p> : <p>Not logged in</p>}
+        {(primaryWallet && (
+          <div>
+            <p>Address: {primaryWallet.address}</p>
+            <p>Status: {primaryWallet.connected ? 'Connected' : 'Not Connected'}</p>
+          </div>
+        )) || <p>Not Logined yet</p>}
         </div>
       </DynamicContextProvider>
     </div>
@@ -54,4 +60,3 @@ function App() {
 }
 
 export default App;
-
