@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { weitoeth, ethtowei } from '../helpers/frontendHelper';
 
-
-function ProjectFund({project , primaryWallet}) {
+function ProjectFund({ project, primaryWallet }) {
   const API_URL = process.env.REACT_APP_BLOCKSCOUT_URL_SHORT + '?module=stats&action=ethprice';
   const [projectValid, setProjectValid] = useState(false);
   const [ch_project, setProject] = useState(project);
@@ -65,24 +64,25 @@ function ProjectFund({project , primaryWallet}) {
   }, []);
 
   return (
-    <div>
-      <form className="flex flex-col">
+    <div className="p-6 bg-white rounded shadow-md">
+      <form className="flex flex-col space-y-4">
         <label className="flex flex-col">
-          Owner Wallet
+          <span className="font-semibold mb-2">Owner Wallet</span>
           <input
             type="text"
-		  	className="opacity-50 select-none"
+            className="opacity-50 select-none bg-gray-200 p-2 rounded"
             name="address"
             value={ch_project.address}
             onChange={handleChange}
             placeholder="Wallet Address"
-			readOnly
+            readOnly
           />
         </label>
         <label className="flex flex-col">
-          Project Name
+          <span className="font-semibold mb-2">Project Name</span>
           <input
             type="text"
+            className="bg-gray-100 p-2 rounded"
             name="name"
             value={ch_project.name}
             onChange={handleChange}
@@ -90,9 +90,10 @@ function ProjectFund({project , primaryWallet}) {
           />
         </label>
         <label className="flex flex-col">
-          Fund
+          <span className="font-semibold mb-2">Fund</span>
           <input
             type="number"
+            className="bg-gray-100 p-2 rounded"
             name="totalFund"
             value={weitoeth(ch_project.totalFund)}
             onChange={handleChange}
@@ -100,15 +101,16 @@ function ProjectFund({project , primaryWallet}) {
             min="0"
             placeholder="Total Fund in ETH"
           />
-          <div className="flex flex-col">
-            <strong>{(weitoeth(ch_project.totalFund) * ethToUsdRate).toFixed(2)} $</strong>
-            <span>1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
+          <div className="flex flex-col mt-2">
+            <strong className="text-lg">{(weitoeth(ch_project.totalFund) * ethToUsdRate).toFixed(2)} $</strong>
+            <span className="text-sm text-gray-500">1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
           </div>
         </label>
         <label className="flex flex-col">
-          Own Invest
+          <span className="font-semibold mb-2">Own Invest</span>
           <input
             type="number"
+            className="bg-gray-100 p-2 rounded"
             name="moneyOwner"
             value={weitoeth(ch_project.moneyOwner)}
             onChange={handleChange}
@@ -116,15 +118,15 @@ function ProjectFund({project , primaryWallet}) {
             min="0"
             placeholder="Your share in ETH"
           />
-          <div className="flex flex-col">
-            <strong>{(weitoeth(ch_project.moneyOwner) * ethToUsdRate).toFixed(2)} $</strong>
-            <span>1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
+          <div className="flex flex-col mt-2">
+            <strong className="text-lg">{(weitoeth(ch_project.moneyOwner) * ethToUsdRate).toFixed(2)} $</strong>
+            <span className="text-sm text-gray-500">1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
           </div>
         </label>
         <label className="flex flex-col">
-          Your Share
+          <span className="font-semibold mb-2">Your Share</span>
           <input
-		  	className="opacity-50 select-none"
+            className="opacity-50 select-none bg-gray-200 p-2 rounded"
             type="number"
             name="percentage"
             value={ch_project.percentage}
@@ -134,7 +136,7 @@ function ProjectFund({project , primaryWallet}) {
         </label>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="bg-blue-500 hover:bg-blue-700 text-white py-2 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
           disabled={!projectValid}
         >
           Apply Share
