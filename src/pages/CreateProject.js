@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { weitoeth, ethtowei } from '../helpers/frontendHelper';
 
-function CreateProject({ activeWallet }) {
+function CreateProject({ primaryWallet }) {
   const API_URL = process.env.REACT_APP_BLOCKSCOUT_URL_SHORT + '?module=stats&action=ethprice';
   const [projectValid, setProjectValid] = useState(false);
   const [project, setProject] = useState({
@@ -11,7 +11,7 @@ function CreateProject({ activeWallet }) {
     totalFund: 0,
     currFund: 0,
     finished: false,
-    address: "none",
+    address: primaryWallet.address,
     percentage: 0,
     moneyOwner: 0,
     shares: [],
@@ -81,10 +81,12 @@ function CreateProject({ activeWallet }) {
           Owner Wallet
           <input
             type="text"
+		  	className="opacity-50 select-none"
             name="address"
             value={project.address}
             onChange={handleChange}
             placeholder="Wallet Address"
+			readOnly
           />
         </label>
         <label className="flex flex-col">
@@ -155,6 +157,7 @@ function CreateProject({ activeWallet }) {
         <label className="flex flex-col">
           Your Share
           <input
+		  	className="opacity-50 select-none"
             type="number"
             name="percentage"
             value={project.percentage}
