@@ -9,6 +9,7 @@ import { EthersExtension } from '@dynamic-labs/ethers-v6';
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 import ListConnectedWallets from './ListConnectedWallets';
 import CreateProject from './pages/CreateProject';
+import NoPage from './pages/NoPage'
 
 function App() {
   const [isLoggined, setLoggined] = useState(false);
@@ -41,6 +42,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/createProject" element={<CreateProject />} />
+              <Route path="*" element={<NoPage />} />
             </Routes>
           </main>
         </Router>
