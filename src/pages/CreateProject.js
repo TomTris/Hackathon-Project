@@ -1,38 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { weitoeth, ethtowei } from '../helpers/frontendHelper';
 
-function CreateProject({activeWallet}) {
+function CreateProject({ primaryWallet }) {
   const API_URL = process.env.REACT_APP_BLOCKSCOUT_URL_SHORT + '?module=stats&action=ethprice';
   const [projectValid, setProjectValid] = useState(false);
-  const [project, setProject] = useState({ name: '', totalFund: '' });
+  const [project, setProject] = useState({
+    name: '',
+    categories: '',
+    totalFund: 0,
+    currFund: 0,
+    finished: false,
+    address: primaryWallet.address,
+    percentage: 0,
+    moneyOwner: 0,
+    shares: [],
+    hash: ""
+  });
   const [ethToUsdRate, setEthToUsdRate] = useState(0);
   const [seconds, setSeconds] = useState(60);
 
   const checkProjectValid = (updatedProject) => {
-	setProjectValid(true);
+    setProjectValid(true);
     if (updatedProject.name.trim() === '') {
       setProjectValid(false);
     }
-	console.log(parseFloat(updatedProject.totalFund));
-	if (isNaN(parseFloat(updatedProject.totalFund)) || parseFloat(updatedProject.totalFund) <= 0) {
-		setProjectValid(false);
-    } 
+    if (isNaN(parseFloat(updatedProject.totalFund)) || parseFloat(updatedProject.totalFund) <= 0) {
+      setProjectValid(false);
+    }
+    if (isNaN(parseFloat(updatedProject.percentage)) || parseFloat(updatedProject.percentage) <= 29.99) {
+      setProjectValid(false);
+    }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    const updatedProject = { ...project, [name]: value };
+    let updatedProject = { ...project, [name]: value };
 
-    if (name === 'totalFund') {
-      const regex = /^\d*\.?\d{0,18}$/;
-      if (value === '' || regex.test(value)) {
-        setProject(updatedProject);
-        checkProjectValid(updatedProject);
-      }
-    } else {
-      setProject(updatedProject);
-      checkProjectValid(updatedProject);
+    if (name === 'totalFund' || name === 'moneyOwner') {
+      updatedProject = { ...updatedProject, [name]: ethtowei(parseFloat(value)) };
     }
+
+    updatedProject.percentage = (updatedProject.moneyOwner / updatedProject.totalFund) * 100;
+    setProject(updatedProject);
+    checkProjectValid(updatedProject);
   };
 
   useEffect(() => {
@@ -70,11 +81,12 @@ function CreateProject({activeWallet}) {
           Owner Wallet
           <input
             type="text"
-            name="name"
-            value={project.name}
+		  	className="opacity-50 select-none"
+            name="address"
+            value={project.address}
             onChange={handleChange}
-            placeholder="Name your Idea"
-
+            placeholder="Wallet Address"
+			readOnly
           />
         </label>
         <label className="flex flex-col">
@@ -88,20 +100,70 @@ function CreateProject({activeWallet}) {
           />
         </label>
         <label className="flex flex-col">
+          Categories
+        </label>
+        <div className="flex flex-wrap">
+          <label className="flex">
+            <input
+              type="checkbox"
+              name="categories"
+              value="ai"
+              onChange={handleChange}
+            />
+            AI
+          </label>
+          <label className="flex">
+            <input
+              type="checkbox"
+              name="categories"
+              value="diy"
+              onChange={handleChange}
+            />
+            DIY
+          </label>
+        </div>
+        <label className="flex flex-col">
           Fund
           <input
             type="number"
             name="totalFund"
-            value={project.totalFund}
+            value={weitoeth(project.totalFund)}
             onChange={handleChange}
             step="0.000000000000000001"
             min="0"
-            placeholder="Total Fund"
+            placeholder="Total Fund in ETH"
           />
           <div className="flex flex-col">
-            <strong>{(project.totalFund * ethToUsdRate).toFixed(2)} $</strong>
+            <strong>{(weitoeth(project.totalFund) * ethToUsdRate).toFixed(2)} $</strong>
             <span>1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
           </div>
+        </label>
+        <label className="flex flex-col">
+          Own Invest
+          <input
+            type="number"
+            name="moneyOwner"
+            value={weitoeth(project.moneyOwner)}
+            onChange={handleChange}
+            step="0.000000000000000001"
+            min="0"
+            placeholder="Your share in ETH"
+          />
+          <div className="flex flex-col">
+            <strong>{(weitoeth(project.moneyOwner) * ethToUsdRate).toFixed(2)} $</strong>
+            <span>1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
+          </div>
+        </label>
+        <label className="flex flex-col">
+          Your Share
+          <input
+		  	className="opacity-50 select-none"
+            type="number"
+            name="percentage"
+            value={project.percentage}
+            readOnly
+          />
+          %
         </label>
         <button
           type="submit"

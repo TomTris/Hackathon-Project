@@ -15,7 +15,7 @@ const ListConnectedWallets = ({ handleLoggin, getWallet }) => {
   }, [primaryWallet, handleLoggin]);
 
   return (
-    <></>
+    <span></span>
   );
 }
 
