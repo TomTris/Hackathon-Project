@@ -11,6 +11,8 @@ import NoPage from './pages/NoPage';
 import Category from './pages/Category';
 import Project from './pages/Project';
 
+const WalletContext = React.createContext();
+
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [primaryWallet, setWallet] = useState(null);
@@ -47,7 +49,7 @@ function App() {
 	  finished: false,
 	  owner: "0xabcdefabcdefabcdefabcdefabcdefabcdef",
 	  percentage: 25,
-	  moneyOwner: 50000,
+	  moneyOwner: '0x31a7f7889C6a73b5C54B8742255ad903A385C945',
 	  shares: [
 		{ owner: "0x1234567890123456789012345678901234567890", percentage: 40 },
 		{ owner: "0xfedcba0987654321098765432109876543210987", percentage: 30 },
@@ -129,7 +131,7 @@ function App() {
               <Route path="/" element={<Home primaryWallet={primaryWallet} isLoggedIn={isLoggedIn} isAnyLoggedIn={isAnyLoggedIn} categories={categories} projects={projects}/>} />
               <Route path="/createProject" element={primaryWallet ? <CreateProject primaryWallet={primaryWallet} /> : <Home primaryWallet={primaryWallet} isLoggedIn={isLoggedIn} isAnyLoggedIn={isAnyLoggedIn} />} />
               <Route path="/categories/:slug" element={<Category />} />
-			  <Route path="/projects/:slug" element={<Project />} />
+			  <Route path="/projects/:slug" element={<Project projects={projects} />} />
 			  primaryWallet
               <Route path="*" element={<NoPage />} />
             </Routes>

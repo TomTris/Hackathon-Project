@@ -31,7 +31,7 @@ function HomeContent({ primaryWallet, isLoggedIn, categories, projects }) {
               <Slider {...sliderSettings}>
                 {getProjectsByCategory(category).map((project, index) => (
                   <div key={index} className="p-2">
-                    <Link to={`/projects/${slugString(project.name)}`} state={{ project: { ...project }, primaryWallet: { ...primaryWallet } }}>
+                    <Link to={`/projects/${slugString(project.name)}`}>
                       <div className="project-box p-4 shadow-lg rounded-lg bg-gray-300 text-black hover:bg-gray-400 transition duration-300 ease-in-out">
                         {project.name}
                       </div>
