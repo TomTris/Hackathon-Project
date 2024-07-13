@@ -1,0 +1,12 @@
+/* Home.css */
+.page-container {
+    transition: background-color 1s ease-in-out;
+    background-color: #9ca3af; /* Initial background color (gray-400) */
+    /* min-height: 100vh; /* Ensure the container covers the full viewport height */
+    /* width: 100vw; Ensure the container covers the full viewport width */
+  }
+  
+  .page-container.fade {
+    background-color: #3b82f6; /* Faded background color (blue-500) */
+  }
+  
