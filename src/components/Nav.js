@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from 'react-router-dom';
+import "./Nav.css"
 
 function Nav() {
 	const location = useLocation();
@@ -11,7 +12,7 @@ function Nav() {
 	return (
 	  <nav>
 		<ul className="flex space-x-4">
-		  <li>
+		  <li className='home_link'>
 			<Link
 			  to="/"
 			  className={getLinkClass('/')}
