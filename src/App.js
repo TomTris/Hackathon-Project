@@ -10,6 +10,7 @@ import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 import ListConnectedWallets from './ListConnectedWallets';
 import CreateProject from './pages/CreateProject';
 import NoPage from './pages/NoPage'
+import Category from './pages/Category';
 
 function App() {
   const [isLoggined, setLoggined] = useState(false);
@@ -51,6 +52,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home primaryWallet={primaryWallet} isLoggined={isLoggined}/>} />
               <Route path="/createProject" element={(primaryWallet) ? <CreateProject primaryWallet={primaryWallet}/> : <Home primaryWallet={primaryWallet} isLoggined={isLoggined}/>} />
+              <Route path="/categories" element={(primaryWallet) ? <Category /> :<Home primaryWallet={primaryWallet} isLoggined={isLoggined}/>} />
             </Routes>
           </main>
         </Router>
