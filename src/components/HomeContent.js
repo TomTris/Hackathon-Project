@@ -1,25 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Slider from 'react-slick';
+import { slugString } from '../helpers/frontendHelper';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-function HomeContent({primaryWallet, isLoggedIn}) {
-	return (
-	  <div className="container mx-auto p-4">
-		<h2 className="text-2xl font-bold mb-4">Categories</h2>
-		<div className="grid grid-cols-4 gap-5">
-			<div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 1</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 2</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 3</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 4</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 5</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 6</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 7</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 8</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 9</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 10</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 11</div>
-            <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">Category 12</div>
-		</div>
-	  </div>
-	);
-  }
+function HomeContent({ primaryWallet, isLoggedIn, categories, projects }) {
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+  };
+
+  const getProjectsByCategory = (category) => {
+    return projects.filter(project => project.categories.includes(category)).slice(0, 10);
+  };
+
+  return (
+    <div className="container mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">Categories</h2>
+      <div className="grid grid-cols-1 gap-5">
+        {categories.map((category, index) => (
+          <div key={index} className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">
+            <Link to={`/categories/${slugString(category)}`} state={{ category }}>
+              {category}
+            </Link>
+            <div>
+              <Slider {...sliderSettings}>
+                {getProjectsByCategory(category).map((project, index) => (
+                  <div key={index} className="p-2">
+                    <Link to={`/projects/${slugString(project.name)}`} state={{ project: { ...project }, primaryWallet: { ...primaryWallet } }}>
+                      <div className="project-box p-4 shadow-lg rounded-lg bg-gray-300 text-black hover:bg-gray-400 transition duration-300 ease-in-out">
+                        {project.name}
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default HomeContent;

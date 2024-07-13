@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function WalletNotice({primaryWallet, isLoggedIn}) {
+function WalletNotice({primaryWallet, isLoggedIn, isAnyLoggedIn}) {
 	return (
 	  <div className="container mx-auto p-4">
 		<h2 className="text-2xl font-bold mb-4">No Wallet found.. :/</h2>

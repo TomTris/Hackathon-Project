@@ -343,3 +343,5 @@ export const FUNDIND_ABI = [
     }
   ];
 export const FUNDIND_ADDRESS = '0x1D14301354840740e9696d956AbD5731A1ba2EF6';
+
+export const asd = 0xD1e639f6E346680079405ff83F982a4a0C1DA35a
