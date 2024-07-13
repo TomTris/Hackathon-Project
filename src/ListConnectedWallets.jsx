@@ -5,7 +5,6 @@ const ListConnectedWallets = ({ handleLoggin, getWallet, handleIsAnyLoggined }) 
   const userWallets = useUserWallets();
   const { primaryWallet } = useDynamicContext();
 
-
   useEffect(() => {
     // Call handleLoggin function whenever primaryWallet connection status changes
     if (primaryWallet && primaryWallet.connected) {
@@ -13,11 +12,10 @@ const ListConnectedWallets = ({ handleLoggin, getWallet, handleIsAnyLoggined }) 
     } else {
       handleLoggin(false);
     }
+
     getWallet(primaryWallet);
 
     let anyWalletConnected = false;
-
-    // Check if any wallet in userWallets is connected
     if (userWallets && userWallets.length > 0) {
       for (const wallet of userWallets) {
         if (wallet.address && wallet.connected) {
@@ -26,6 +24,7 @@ const ListConnectedWallets = ({ handleLoggin, getWallet, handleIsAnyLoggined }) 
         }
       }
     }
+    handleIsAnyLoggined(anyWalletConnected);
   }, [primaryWallet, userWallets, handleLoggin, getWallet, handleIsAnyLoggined]);
 
   return (
