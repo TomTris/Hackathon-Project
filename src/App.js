@@ -10,6 +10,7 @@ import CreateProject from './pages/CreateProject';
 import NoPage from './pages/NoPage';
 import Category from './pages/Category';
 import Project from './pages/Project';
+import './backgrounds.css';
 
 const WalletContext = React.createContext();
 
@@ -108,14 +109,15 @@ function App() {
         }}
       >
         <Router>
-          <header className="App-header bg-blue-500 text-red p-4">
+          <header className="App-header animated-gradient bg-emerald-700 text-red p-4 flex justify-space-between">
             <Link to="/">
               <img src="/cryptofund-logo.png" width="50" height="50" alt="CryptoFund Logo"/>
             </Link>
-            <h1 className="text-2xl font-bold text-red">CRYPTOFUND</h1>
-            <p>Welcome to CryptoFund, your decentralized and anonymous way of crowdfunding</p>
+			<div className="flex-grow">
+            	<h1 className="text-7xl font-serif text-red ml-8">CRYPTOFUND</h1>
+			</div>
             <Nav primaryWallet={primaryWallet} isLoggedIn={isLoggedIn} isAnyLoggedIn={isAnyLoggedIn} />
-            <DynamicWidget />
+            <DynamicWidget className="justify-self-end"/>
           </header>
           <main className="p-4">
             <Routes>

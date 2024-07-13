@@ -50,26 +50,18 @@ function HomeContent({ primaryWallet, isLoggedIn, projects }) {
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Categories</h2>
       <div className="grid grid-cols-1 gap-5">
-        {categories.map((category, index) => (
-          <div key={index} className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out">
-            <Link to={`/categories/${slugString(category)}`} state={{ category }}>
-              {category}
-            </Link>
+          <div className="category-box p-4 shadow-lg rounded-lg bg-gray-500 text-white hover:bg-black transition duration-300 ease-in-out"
+            style={{ width: '20vw', height: '20vw'}}>
             <div>
-              <Slider {...sliderSettings}>
-                {getProjectsByCategory(category).map((project, index) => (
-                  <div key={index} className="p-2">
-                    <Link to={`/projects/${slugString(project.name)}`}>
+              {/* <Slider {...sliderSettings}>
+                  <div   className="p-2">
                       <div className="project-box p-4 shadow-lg rounded-lg bg-gray-300 text-black hover:bg-gray-400 transition duration-300 ease-in-out">
-                        {project.name}
+                        Boxes
                       </div>
-                    </Link>
                   </div>
-                ))}
-              </Slider>
+              </Slider> */}
             </div>
           </div>
-        ))}
       </div>
     </div>
   );
