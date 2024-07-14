@@ -12,12 +12,24 @@ function ActionForm() {
     const [seconds, setSeconds] = useState(60);
     const [gift, setGift] = useState({ address: '', message: '', amount: ''});
 
-	function submitGift()
-	{
-		contract.getMoney(gift.amount)
-	}
+    async function callGetMoney() {
+        try {
+            const tx = await contract.getMoney(gift.message, {
+                value: ethers.parseEther(gift.amount.toString())
+            });
+            await tx.wait();
+            console.log('Transaction successful:', tx);
+        } catch (err) {
+            console.error('Transaction failed:', err);
+            setError('Transaction failed: ' + err.message);
+        }
+    }
 
-	function ethtowei(eth) {
+    async function submitGift() {
+        await callGetMoney();
+    }
+
+    function ethtowei(eth) {
         return eth * Math.pow(10, 18);
     }
 
@@ -25,32 +37,26 @@ function ActionForm() {
         return wei / Math.pow(10, 18);
     }
 
-	function isAddressValid(address) {
-		const regex = /^0x[a-fA-F0-9]{40}$/;
-	
-		if (address.trim() === '') {
-			return false;
-		}
-	
-		return regex.test(address);
-	}
+    function isAddressValid(address) {
+        const regex = /^0x[a-fA-F0-9]{40}$/;
+        return regex.test(address.trim());
+    }
+
     const checkGiftValid = (updatedGift) => {
         let isValid = true;
-		console.log(updatedGift.address)
+
         if (!isAddressValid(updatedGift.address)) {
             isValid = false;
-			console.error(updatedGift.address)
         }
-		console.log(updatedGift.amount)
+
         if (isNaN(parseFloat(updatedGift.amount)) || parseFloat(updatedGift.amount) <= 0) {
             isValid = false;
-			console.error(updatedGift.amount)
         }
-		console.log(updatedGift.message)
+
         if (updatedGift.message.trim() === '') {
             isValid = false;
-			console.error(updatedGift.message)
         }
+
         setGiftValid(isValid);
     };
 
@@ -58,9 +64,8 @@ function ActionForm() {
         const { name, value } = event.target;
         let updatedGift = { ...gift, [name]: value };
 
-		console.warn(gift)
         if (name === 'amount') {
-			updatedGift = { ...gift, [name]: ethtowei(parseFloat(value)) };
+            updatedGift = { ...gift, [name]: ethtowei(parseFloat(value)) };
         }
 
         setGift(updatedGift);
@@ -73,7 +78,8 @@ function ActionForm() {
                 try {
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     const provider = new ethers.BrowserProvider(window.ethereum);
-                    const contract = new ethers.Contract(contractAddress, contractABI, provider);
+                    const signer = provider.getSigner();
+                    const contract = new ethers.Contract(contractAddress, contractABI, signer);
                     setContract(contract);
                 } catch (err) {
                     setError('Error loading contracts: ' + err.message);
@@ -83,7 +89,7 @@ function ActionForm() {
             }
         };
         init();
-    }, []);
+    }, [setContract]);
 
     useEffect(() => {
         const fetchEthToUsdRate = async () => {
@@ -103,7 +109,7 @@ function ActionForm() {
         }, 60000);
 
         return () => clearInterval(interval);
-    }, [eth_rate_blockscout]);
+    }, []);
 
     useEffect(() => {
         const countdown = setInterval(() => {
@@ -115,39 +121,40 @@ function ActionForm() {
 
     return (
         <div className='w-full max-w-md mx-auto flex gap-5'>
-			<div className='flex-col  gap-5'>
-            	<label className="flex flex-col">
-            	    <span className="font-semibold mb-2">Address</span>
-            	    <input className="bg-gray-100 p-2 rounded" type="text" name="address" value={gift.address} onChange={handleChange} />
-            	</label>
-            	<label className="flex flex-col">
-            	    <span className="font-semibold mb-2">Own Invest</span>
-            	    <input
-            	        type="number"
-            	        className="bg-gray-100 p-2 rounded"
-            	        name="amount"
-            	        value={weitoeth(gift.amount)}
-            	        onChange={handleChange}
-            	        step="0.0001"
-            	        min="0"
-            	        placeholder="Your share in ETH"
-            	    />
-            	    <div className="flex flex-col mt-2">
-            	        <strong className="text-lg">{(parseFloat(gift.amount) * ethToUsdRate).toFixed(2)} $</strong>
-            	        <span className="text-sm text-gray-500">1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
-            	    </div>
-            	</label>
-			</div>
-			<div className='flex-col  gap-5'>
-            <label className="flex flex-col">
-                <span className="font-semibold mb-2">Message</span>
-                <textarea className="bg-gray-100 p-2 rounded" name="message" value={gift.message} onChange={handleChange}></textarea>
-            </label>
-            <button onClick={submitGift} className="w-full bg-green-500 shadow-md rounded-lg p-4 text-white hover:cursor-pointer hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-    disabled={!giftValid}>
-                Send
-            </button>
-			</div>
+            <div className='flex-col  gap-5'>
+                <label className="flex flex-col">
+                    <span className="font-semibold mb-2">Address</span>
+                    <input className="bg-gray-100 p-2 rounded" type="text" name="address" value={gift.address} onChange={handleChange} />
+                </label>
+                <label className="flex flex-col">
+                    <span className="font-semibold mb-2">Own Invest</span>
+                    <input
+                        type="number"
+                        className="bg-gray-100 p-2 rounded"
+                        name="amount"
+                        value={weitoeth(gift.amount)}
+                        onChange={handleChange}
+                        step="0.0001"
+                        min="0"
+                        placeholder="Your share in ETH"
+                    />
+                    <div className="flex flex-col mt-2">
+                        <strong className="text-lg">{(weitoeth(gift.amount) * ethToUsdRate).toFixed(2)} $</strong>
+                        <span className="text-sm text-gray-500">1 ETH / {ethToUsdRate}$ currently (update in {seconds}s)</span>
+                    </div>
+                </label>
+            </div>
+            <div className='flex-col  gap-5'>
+                <label className="flex flex-col">
+                    <span className="font-semibold mb-2">Message</span>
+                    <textarea className="bg-gray-100 p-2 rounded" name="message" value={gift.message} onChange={handleChange}></textarea>
+                </label>
+                <button onClick={submitGift} className="w-full bg-green-500 shadow-md rounded-lg p-4 text-white hover:cursor-pointer hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    disabled={!giftValid}>
+                    Send
+                </button>
+            </div>
+            {error && <div className="text-red-500 mt-4">{error}</div>}
         </div>
     );
 }

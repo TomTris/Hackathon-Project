@@ -19,8 +19,10 @@ function Actionbar() {
 					if(accounts[0]){
 						setWallet(accounts[0]); 
 					}
-                    const provider = new ethers.BrowserProvider(window.ethereum);
-                    const contractInstance = new ethers.Contract(contractAddress, contractABI, provider);
+                    const provider = new ethers.JsonRpcProvider(window.ethereum);
+					 const signer = provider.getSigner();
+
+                    const contractInstance = new ethers.Contract(contractAddress, contractABI, signer);
                     setContract(contractInstance);
                 } catch (err) {
                     setError('Error loading contracts: ' + err.message);

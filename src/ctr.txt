@@ -1,0 +1,171 @@
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ContractRule
+{
+
+    struct Transaction
+    {
+        address sendBy;
+        address to;
+        uint    amount;
+        uint    timestamp;
+        string  purpose;
+        string  content;
+        string  nameOfReciver;
+    }
+
+    struct Manager
+    {
+        string  nameOfManager;
+        address managersAddress;
+        uint    allowedSpend;
+        uint    currentlySpend;
+        uint    timeCreated;
+        uint    timeDeleted;
+    }
+
+    struct Receive
+    {
+        address _from;
+        string  message;
+        uint    timestamp;
+        uint    amount;
+    }
+
+    address public owner;
+    string public nameOfOwner;
+    Manager[] public managers;
+    Receive[] public receives;
+    Transaction[] public transactions;
+
+    event GettingMoney(address _from, uint amountRec);
+    event SendingMoney(address _to, uint amountSend);
+
+    constructor(string memory name)
+    {
+        owner = msg.sender;
+        nameOfOwner = name;
+    }
+
+    function addManager(string memory name, address managersAdd, uint allowed) external returns(bool)
+    {
+        for (uint i = 0; i < managers.length; i++)
+        {
+            if (managers[i].managersAddress == managersAdd && managers[i].timeDeleted == 0)
+                return (false);
+        }
+        managers.push();
+        Manager storage newManager = managers[managers.length - 1];
+        newManager.nameOfManager = name;
+        newManager.managersAddress = managersAdd;
+        newManager.allowedSpend = allowed;
+        newManager.timeCreated = block.timestamp;
+        return (true);
+    }
+
+    function removeManager(address man) external returns(bool)
+    {
+        for (uint i = 0; i < managers.length; i++)
+        {
+            if (managers[i].managersAddress == man)
+            {
+                if (managers[i].timeDeleted == 0)
+                {
+                    managers[i].timeDeleted = block.timestamp;
+                    return (true);
+                }
+            }
+        }
+        return (false);
+    }
+    
+    function getMoneyPossibleToSpend(address man) public view returns(uint) 
+    {
+        for (uint i = 0; i < managers.length; i++)
+        {
+            if (managers[i].managersAddress == man && managers[i].timeDeleted == 0)
+            {
+                return (managers[i].allowedSpend - managers[i].currentlySpend);
+            }
+        }
+        return 0;
+    }
+
+    function getMoneyOnContract() public view returns (uint)
+    {
+        return  address(this).balance;
+    }
+
+    function getUnsharedMoney() public view returns (uint)
+    {
+        uint unSharedMoney = getMoneyOnContract();
+        for (uint i = 0; i < managers.length; i++)
+        {
+            if (managers[i].timeDeleted == 0)
+            {
+                unSharedMoney -= (managers[i].allowedSpend - managers[i].currentlySpend);
+            }
+        }
+        return unSharedMoney;
+    }
+
+    function changeMoneySpendByManager(address man, bool increase, uint amount) external 
+    {
+        if (increase == true)
+            require(getUnsharedMoney() >= amount, "Not enough unshared money");
+        for (uint i = 0; i < managers.length; i++)
+        {
+            if (managers[i].managersAddress == man)
+            {
+                if (managers[i].timeDeleted == 0)
+                {
+                    if (increase)
+                    {
+                        managers[i].allowedSpend += amount;
+                    }
+                    else if (managers[i].allowedSpend - managers[i].currentlySpend >= amount)
+                    {
+                        managers[i].allowedSpend = managers[i].currentlySpend;
+                    }
+                    else
+                    {
+                          managers[i].allowedSpend -= amount;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    function sendMoney(address receiver, uint amount, string memory content, string memory purpose, string memory nameOfReciv) external 
+    {
+        require(amount <= getMoneyOnContract(), "contract has To little money");
+        uint index = 0;
+        if (msg.sender != owner)
+        {
+            bool seen = false;
+            for (uint i = 0; i < managers.length; i++)
+            {
+                if (msg.sender == managers[i].managersAddress && managers[i].timeDeleted != 0)
+                {
+                    index = i;
+                    seen = true;
+                    break;
+                }
+            }
+            require(seen, "It is not Manager nor Owner");
+            require(managers[index].allowedSpend - managers[index].currentlySpend <= amount, "Manager cant spend so much");
+        }
+        transactions.push(Transaction(msg.sender, receiver, amount, block.timestamp, purpose, content, nameOfReciv));
+        emit SendingMoney(msg.sender, amount);
+    }
+
+    function getMoney(string memory message) external payable
+    {
+        receives.push(Receive(msg.sender, message, block.timestamp, msg.value));
+        emit GettingMoney(msg.sender, msg.value);
+    }
+
+}
